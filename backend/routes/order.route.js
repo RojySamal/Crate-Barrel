@@ -1,10 +1,9 @@
-const express = require("express");
+import express from "express";
 const orderRouter = express.Router();
 
-const { orderModel } = require("../models/order.model");
-const { auth } = require("../middlewares/auth.middleware");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import orderModel from "../models/order.model.js";
+import auth from "../middleware/auth.middleware.js";
+import jwt from "jsonwebtoken";
 
 //Post products by user
 orderRouter.post("/", auth, async (req, res) => {
@@ -37,4 +36,4 @@ orderRouter.get("/", async (req, res) => {
 });
 
 //Export router
-module.exports = { orderRouter };
+export default orderRouter;

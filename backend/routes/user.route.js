@@ -1,36 +1,46 @@
-const express = require("express");
-const { userModel } = require("../models/user.model");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import express from "express";
+import userModel from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const userRouter = express.Router();
 
-// Register
 userRouter.post("/register", async (req, res) => {
   const { title, firstName, lastName, email, password, phone } = req.body;
-  try {
-    bcrypt.hash(password, 5, async (err, hash) => {
-      if (err) {
-        res.send({ msg: "Something wnet wrong", error: err.message });
-      } else {
-        const user = new userModel({
-          title,
-          firstName,
-          lastName,
-          email,
-          password: hash,
-          phone,
-        });
-        await user.save();
-      }
-    });
-    res.send({ msg: "User registration successful" });
-  } catch (error) {
-    res.send({ msg: "Error registering user", error: error.message });
+  if (
+    [title, firstName, lastName, email, password, phone].some(
+      (field) => field?.trim() === ""
+    )
+  ) {
+    res.send({ msg: "All fields are required", status: 400 });
+  } else {
+    try {
+      bcrypt.hash(password, 5, async (err, hash) => {
+        if (err) {
+          res.send({ msg: "Something wnet wrong", error: err.message });
+        } else {
+          const user = new userModel({
+            title,
+            firstName,
+            lastName,
+            email,
+            password: hash,
+            phone,
+          });
+          await user.save();
+        }
+      });
+      res.send({ msg: "User registration successful", status: 200 });
+    } catch (error) {
+      res.send({
+        msg: "Error registering user",
+        error: error.message,
+        status: 400,
+      });
+    }
   }
 });
 
-// Login
 userRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -39,16 +49,16 @@ userRouter.post("/login", async (req, res) => {
       bcrypt.compare(password, user.password, (err, result) => {
         if (result) {
           let token = jwt.sign({ userID: user._id }, "stylefusion");
-          res.send({ msg: "Login Successful", token: token });
+          res.send({ msg: "Login Successful", token: token, status: 200 });
         } else {
-          res.send({ msg: "Wrong Credentials" });
+          res.send({ msg: "Wrong Credentials", status: 401 });
         }
       });
     } else {
-      res.send({ msg: "Wrong Credentials" });
+      res.send({ msg: "User Does'nt exist", status: 404 });
     }
   } catch (error) {
-    res.send({ msg: "Error logging user", error: error.message });
+    res.send({ msg: "Error logging user", error: error.message, status: 500 });
   }
 });
 
@@ -76,4 +86,4 @@ userRouter.get("/details", async (req, res) => {
   }
 });
 
-module.exports = { userRouter };
+export default userRouter;

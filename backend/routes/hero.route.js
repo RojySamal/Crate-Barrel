@@ -1,9 +1,7 @@
-const express = require("express");
-const { heroModel } = require("../models/hero.model");
-
+import express from "express";
+import heroModel from "../models/hero.model.js";
 const heroRouter = express.Router();
 
-// get
 heroRouter.get("/:category", async (req, res) => {
   const category = req.params.category;
   try {
@@ -20,4 +18,4 @@ heroRouter.get("/:category", async (req, res) => {
   }
 });
 
-module.exports = { heroRouter };
+export default heroRouter;

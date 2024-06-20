@@ -1,6 +1,5 @@
-const express = require("express");
-const { productModel } = require("../models/product.model");
-
+import express from "express";
+import productModel from "../models/product.model.js";
 const productRouter = express.Router();
 
 // get products
@@ -34,8 +33,6 @@ productRouter.get("/:category/:id", async (req, res) => {
   }
 });
 
-module.exports = { productRouter };
-
 // add a product
 productRouter.post("/add", async (req, res) => {
   const payload = req.body;
@@ -50,3 +47,5 @@ productRouter.post("/add", async (req, res) => {
     });
   }
 });
+
+export default productRouter;

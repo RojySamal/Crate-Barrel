@@ -1,17 +1,19 @@
-const express = require("express");
-const cors = require("cors");
-const { connection } = require("./db");
-const { userRouter } = require("./routes/user.route");
-const { productRouter } = require("./routes/product.route");
-// const { cartRouter } = require("./routes/cart.route");
-const { orderRouter } = require("./routes/order.route");
-const { heroRouter } = require("./routes/hero.route");
+import express from "express";
+import cors from "cors";
+import connection from "./db.js";
+import userRouter from "./routes/user.route.js";
+import productRouter from "./routes/product.route.js";
+import orderRouter from "./routes/order.route.js";
+import heroRouter from "./routes/hero.route.js";
+import "dotenv/config";
 
 const app = express();
-app.use(express.json());
-app.use(cors());
 
-app.get("/", (req, res) => {
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (_, res) => {
   res.send("Hello World!");
 });
 

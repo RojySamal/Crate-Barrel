@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
+import { connect } from "mongoose";
 
-const connection = mongoose.connect("mongodb://127.0.0.1:27017/crate&barrel");
+const connection = connect(process.env.MONGO_URL);
 
-module.exports = { connection };
+export default connection;

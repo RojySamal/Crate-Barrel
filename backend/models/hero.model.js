@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const heroSchema = mongoose.Schema(
+const heroSchema = Schema(
   {
     category: {
       type: String,
@@ -24,6 +24,6 @@ const heroSchema = mongoose.Schema(
   }
 );
 
-const heroModel = mongoose.model("hero", heroSchema);
+const heroModel = model("hero", heroSchema);
 
-module.exports = { heroModel };
+export default heroModel;
